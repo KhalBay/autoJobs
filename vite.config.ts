@@ -15,7 +15,7 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
-  base: './auto_hh',
+  base: './autoJobs',
   build: {
     outDir: 'docs', // Сборка будет в папку docs
     emptyOutDir: true, // Очищать папку перед сборкой
