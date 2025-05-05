@@ -1,22 +1,19 @@
 <script setup>
-import {useRouter} from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { computed, onMounted, ref } from "vue";
 import OpenAI from "openai"
+import { api } from "@/api/index.js";
 
 const router = useRouter()
+const route = useRoute()
 
 const goToTask = async () => {
   await router.push('/posts')
 }
 
-// const clientId = 'ваш_client_id';
-// const redirectUri = 'https://ваш_сайт/callback'; // Должен совпадать с настройками в HH
 const answers = ref('')
 const clientId = ref(`${import.meta.env.VITE_CLIENT_ID}`)
 const redirectUrl = ref('https://khalbay.github.io/autoJobs/')
-
-
-const hhAuthUrl = `https://hh.ru/oauth/authorize?response_type=code&client_id=${clientId.value}&redirect_uri=${redirectUrl.value}`
 
 
 const wac = `Мы аккредитованная ИТ-компания Smartdata.dev, занимаемся разработкой отраслевых продуктов в сфере обращения с отходами, в сфере экотуризма, а так же создаем корпоративные продукты для управления предприятием.
@@ -167,28 +164,37 @@ async function complete_request() {
   }
 }
 
+const auth = async () => {
+  const hhAuthUrl = `https://hh.ru/oauth/authorize?response_type=code&client_id=${clientId.value}&redirect_uri=${redirectUrl.value}`
+  window.location.href = hhAuthUrl
+}
+
 // complete_request()
 
-// onMounted(() => {
-//   clientId.value =
-// })
+onMounted(async () => {
+  const code = await route.query.code
+  if (code) {
+    const data = {
+      client_id: clientId.value,
+      code: code,
+      grant_type: "authorization_code",
+      redirect_uri: redirectUrl.value,
+      client_secret: import.meta.env.VITE_CLIENT_SECRET,
+    }
+    const res = await api.auth.getToken(data)
+    console.log(res)
+  }
+})
 </script>
 
 <template>
   <div class="welcome">
-    <div>
-      <h1>Прежде чем начать, нужно аторизоваться.</h1>
-      <div class="cont">
-        <p>Client Id: </p>
-        <input v-model="clientId" type="text" placeholder="Client Id">
-      </div>
-
-    </div>
-    <div class="welcome__section">
-      >{{ answers }}<
-    </div>
-    <a :href="hhAuthUrl">HTLBH HH</a>
-    <button @click="goToTask">goToTask</button>
+    <h1>Авторизация</h1>
+<!--    <div class="welcome__section">-->
+<!--      >{{ answers }}<-->
+<!--    </div>-->
+    <button @click="auth">Вход</button>
+<!--    <button @click="goToTask">goToTask</button>-->
   </div>
 </template>
 

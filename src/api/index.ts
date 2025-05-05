@@ -1,5 +1,5 @@
-import post from "./post";
+import auth from "./auth";
 
 export const api = {
-  post,
+  auth,
 }
