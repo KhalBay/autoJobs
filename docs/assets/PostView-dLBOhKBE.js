@@ -1,0 +1,1 @@
+import{_ as s,c as t,o as r,a as n,b as a,e as c}from"./index-CtKSba-P.js";const _={},d={class:"posts-view"};function i(l,e){const o=c("router-view");return r(),t("div",d,[e[0]||(e[0]=n("h1",null,"Страница с постами",-1)),a(o)])}const f=s(_,[["render",i],["__scopeId","data-v-4de489dd"]]);export{f as default};
